@@ -32,8 +32,24 @@ const ExpenseForm: React.FC = (props) => {
             description: enteredDescription || "",
             price: enteredAmount
         };
-
         dispatch(expenseActions.addExpense({expense: newExpense}));
+
+        const postItem = async () => {
+            const response = await fetch("http://localhost:3000/prod/item", {
+                method: "post",
+                body: JSON.stringify({item: newExpense}),
+                headers: {
+                    "app_user_id": "123",
+                    "app_user_name": "Wilson",
+                    "Content-Type": "application/json"
+                }
+            })
+            const data = await response.json();
+            console.log(data)
+        }
+
+        postItem();
+
 
     }
     return (
