@@ -1,25 +1,18 @@
 import React from 'react';
 import ExpenseItem from "./ExpenseItem/ExpenseItem";
 import classes from './Expenses.module.css';
+import Card from "../UI/Card/Card";
+import ExpenseItems from "./ExpenseItems/ExpenseItems";
+import {ExpenseType} from "../../App";
 
-const Expenses: React.FC = (props) => {
+const Expenses: React.FC<{expenses: ExpenseType[]}> = (props) => {
 
     return (
-        <table className={classes.table}>
-            <thead>
-                <tr>
-                    <th>Category 1</th>
-                    <th>Category 2</th>
-                    <th>Category 3</th>
-                    <th>Category 4</th>
-                    <th>Category 5</th>
-                    <th>Category 6</th>
-                </tr>
-            </thead>
-            <tbody>
-                <ExpenseItem />
-            </tbody>
-        </table>
+        <div className={classes.expenses}>
+            <ExpenseItems expenses={props.expenses}/>
+        </div>
+
+
 
 
     )

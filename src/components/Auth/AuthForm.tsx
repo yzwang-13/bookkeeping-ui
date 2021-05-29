@@ -1,5 +1,6 @@
 import React from "react";
 import classes from './AuthForm.module.css';
+import Button from "../UI/Button/Button";
 
 const AuthForm: React.FC = (props) => {
 
@@ -15,7 +16,7 @@ const AuthForm: React.FC = (props) => {
                     <input type='password' id='password' required />
                 </div>
                 <div className={classes.actions}>
-                    <button>Sign in</button>
+                    <Button>Sign in</Button>
                 </div>
             </form>
         </section>

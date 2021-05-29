@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
 import classes from './MainNavigation.module.css';
+import Button from "../UI/Button/Button";
 
 const MainNavigation: React.FC = () => {
 
@@ -14,13 +15,16 @@ const MainNavigation: React.FC = () => {
                         <Link to='/expenses'>My Expenses</Link>
                     </li>
                     <li>
+                        <Link to='/new-expense'>Add New Expense</Link>
+                    </li>
+                    <li>
                         <Link to='/auth'>Login</Link>
                     </li>
                     <li>
                         <Link to='/profile'></Link>
                     </li>
                     <li>
-                        <button>Logout</button>
+                        <Button>Logout</Button>
                     </li>
                 </ul>
             </nav>
