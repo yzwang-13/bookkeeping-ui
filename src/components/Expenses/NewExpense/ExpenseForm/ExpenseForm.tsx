@@ -35,7 +35,7 @@ const ExpenseForm: React.FC = (props) => {
         dispatch(expenseActions.addExpense({expense: newExpense}));
 
         const postItem = async () => {
-            const response = await fetch("http://localhost:3000/prod/item", {
+            const response = await fetch("https://bm53lrwhbd.execute-api.ap-southeast-2.amazonaws.com/prod/item", {
                 method: "post",
                 body: JSON.stringify({item: newExpense}),
                 headers: {
