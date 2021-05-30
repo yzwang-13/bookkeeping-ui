@@ -34,21 +34,21 @@ const ExpenseForm: React.FC = (props) => {
         };
         dispatch(expenseActions.addExpense({expense: newExpense}));
 
-        const postItem = async () => {
-            const response = await fetch("https://bm53lrwhbd.execute-api.ap-southeast-2.amazonaws.com/prod/item", {
-                method: "post",
-                body: JSON.stringify({item: newExpense}),
-                headers: {
-                    "app_user_id": "123",
-                    "app_user_name": "Wilson",
-                    "Content-Type": "application/json"
-                }
-            })
-            const data = await response.json();
-            console.log(data)
-        }
-
-        postItem();
+        // const postItem = async () => {
+        //     const response = await fetch("https://bm53lrwhbd.execute-api.ap-southeast-2.amazonaws.com/prod/item", {
+        //         method: "post",
+        //         body: JSON.stringify({item: newExpense}),
+        //         headers: {
+        //             "app_user_id": "123",
+        //             "app_user_name": "Wilson",
+        //             "Content-Type": "application/json"
+        //         }
+        //     })
+        //     const data = await response.json();
+        //     console.log(data)
+        // }
+        //
+        // postItem();
 
 
     }
