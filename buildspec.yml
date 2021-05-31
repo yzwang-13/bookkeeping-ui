@@ -4,14 +4,17 @@ phases:
   install:
     commands:
       - echo ===install===
-      - echo install nodejs 12...
-      - curl -fsSL https://deb.nodesource.com/setup_12.x | bash
-      - apt install -y nodejs
+#      - echo install nodejs 12...
+#      - curl -fsSL https://deb.nodesource.com/setup_12.x | bash
+#      - apt install -y nodejs
   pre_build:
     commands:
       - echo ===pre-build===
-      - echo installing dependencies
-      - npm install
+#      - echo installing dependencies
+#      - npm install
+      - echo Deployment started on `date`
+      - echo sync S3 content
+      - aws s3 sync ./build/ s3://dailybookkeeping.com.au
   build:
     commands:
       - echo ===build===
