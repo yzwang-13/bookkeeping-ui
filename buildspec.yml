@@ -16,9 +16,12 @@ phases:
     commands:
       - echo ===build===
       - npm run build
+      - echo cloudfront cache invalidation...
+      - aws cloudfront create-invalidation --distribution-id E3SMALSVRZKFHH --paths "/*"
   post_build:
     commands:
       - echo ===post_build===
+      - echo Deployment completed on `date`
 artifacts:
   files:
     - "**/*"
