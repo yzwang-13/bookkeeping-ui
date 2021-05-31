@@ -5,13 +5,16 @@ import App from './App';
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import store from "./store/store";
+import {AuthContextProvider} from "./context/authContext";
 
 ReactDOM.render(
-    <Provider store={store}>
-        <BrowserRouter>
-            <App/>
-        </BrowserRouter>
-    </Provider>
+    <AuthContextProvider>
+        <Provider store={store}>
+            <BrowserRouter>
+                <App/>
+            </BrowserRouter>
+        </Provider>
+    </AuthContextProvider>
     ,
     document.getElementById('root')
 );
