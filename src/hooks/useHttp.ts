@@ -5,7 +5,8 @@ const useHttp = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const httpRequest = useCallback(async (requestConfig = {}, applyData = ()=> {}, errorMessage: {error: string}) => {
+    const httpRequest = useCallback(async (requestConfig = {}, applyData = () => {
+    }, errorMessage: { error: string }) => {
         try {
             setIsLoading(true);
             console.log('sending request...');
@@ -13,10 +14,13 @@ const useHttp = () => {
             let response = null;
             try {
                 response = await fetch(
-                    requestConfig.url, {
-                        method: requestConfig.method ? requestConfig.method : 'POST' ,
-                        body: requestConfig.body? JSON.stringify(requestConfig.body): null,
-                        headers: requestConfig.headers? requestConfig.headers : {}
+                    requestConfig.url,
+                    {
+                        method: requestConfig.method ? requestConfig.method : 'POST',
+                        body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
+                        headers: requestConfig.headers ? requestConfig.headers : {
+                            'Content-Type': 'application/json',
+                        }
                     }
                 );
                 if (!response.ok) {
@@ -27,7 +31,7 @@ const useHttp = () => {
                 const data = await response.json();
                 console.log(data);
                 applyData(data);
-            }catch (e) {
+            } catch (e) {
                 console.log(e);
                 applyData({error: errorMessage.error})
             }

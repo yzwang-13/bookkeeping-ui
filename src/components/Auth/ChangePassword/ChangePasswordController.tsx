@@ -1,30 +1,33 @@
-import React from "react";
+import React, {useContext} from "react";
 import ChangePasswordForm from "./ChangePasswordForm";
-import {CognitoUserSession} from "amazon-cognito-identity-js";
-import {useLocation} from "react-router-dom";
-import useCognito from "../../../hooks/auth/useCognito";
-import useHttp from "../../../hooks/useHttp";
+import {useLocation, useHistory} from "react-router-dom";
+import {AuthContext} from "../../../context/authContext";
 
 const ChangePasswordController:React.FC = (props) => {
 
     const location = useLocation();
-    const {isLoading,signIn} = useCognito();
+    const history = useHistory();
+    const authCtx = useContext(AuthContext);
     const queryParams = new URLSearchParams(location.search);
     const userName = queryParams.get('id')
     console.log(userName);
 
     const newPasswordSubmitHandler = async (event: React.FormEvent, tempPassword: string, newPassowrd: string) => {
         event.preventDefault();
-        await console.log("aaaa");
-        const cognitoToken = await signIn(userName!, tempPassword, newPassowrd);
-        console.log(cognitoToken);
-        const token = await (cognitoToken as CognitoUserSession).getIdToken().getJwtToken();
-        console.log(token)
-        console.log('bbbbbb')
+        const handleResponse = async (data: any) => {
+            if (data.error) {
+                console.log(data.error)
+            } else {
+                // console.log(data);
+                history.push(`/`);
+            }
+        }
+        await authCtx?.changePassword(userName!, tempPassword, newPassowrd, handleResponse);
+
     }
 
   return (
-        <ChangePasswordForm isLoading={isLoading} onSubmitNewPassword={newPasswordSubmitHandler}/>
+        <ChangePasswordForm isLoading={authCtx!.isLoading} onSubmitNewPassword={newPasswordSubmitHandler}/>
     )
 }
 
