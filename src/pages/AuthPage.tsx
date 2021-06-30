@@ -1,7 +1,9 @@
 import React from 'react';
-import AuthForm from '../components/Auth/AuthForm';
+import AuthForm from '../components/Auth/SigninSignup/AuthForm';
 import {Switch, Route} from 'react-router-dom';
-import ChangePassword from "../components/Auth/ChangePassword/ChangePassword";
+import ChangePasswordForm from "../components/Auth/ChangePassword/ChangePasswordForm";
+import AuthFormController from "../components/Auth/SigninSignup/AuthFormController";
+import ChangePasswordController from "../components/Auth/ChangePassword/ChangePasswordController";
 
 const AuthPage: React.FC = () => {
     console.log('auth page')
@@ -9,10 +11,10 @@ const AuthPage: React.FC = () => {
     return (
             <Switch>
                 <Route path="/auth/changePassword">
-                    <ChangePassword />
+                    <ChangePasswordController />
                 </Route>
                 <Route path="/auth">
-                    <AuthForm />
+                    <AuthFormController />
                 </Route>
             </Switch>
         )

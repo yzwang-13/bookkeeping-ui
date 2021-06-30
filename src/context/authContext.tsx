@@ -1,10 +1,11 @@
 import React, {useCallback, useState} from 'react';
+import useHttp from "../hooks/useHttp";
 
 type contextProp = {
     idToken: string | null,
     isLoggedIn: boolean,
     login: (token: string) => void,
-    register: ({}: object, applyData: (data: any)=>{}) => void,
+    register: ({}: any, applyData: (data: any) => {}) => void,
     logout: () => void
 }
 
@@ -15,13 +16,13 @@ export const AuthContext = React.createContext<contextProp | null>({
     },
     logout: () => {
     },
-    register: ({}, applyData: (data: any)=>{}) => {}
+    register: ({}: any, applyData: (data: any) => {}) => {
+    }
 });
 
 export const AuthContextProvider: React.FC = (props) => {
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const {register} = useHttp();
 
     const token = localStorage.getItem('id_token');
     const useIsLoggedIn = !!token;
@@ -39,44 +40,16 @@ export const AuthContextProvider: React.FC = (props) => {
         localStorage.removeItem('id_token');
     }
 
-    const registerHandler = useCallback(async (requestConfig = {}, applyData = ()=> {}) => {
-        try {
-            setIsLoading(true);
-            setError(null);
-            let response = null;
-            try {
-                response = await fetch(
-                    requestConfig.url, {
-                        method: requestConfig.method ? requestConfig.method : 'POST' ,
-                        body: requestConfig.body? JSON.stringify(requestConfig.body): null,
-                        headers: requestConfig.headers? requestConfig.headers : {}
-                    }
-                );
-                if (!response.ok) {
-                    throw new Error('register account failed, please try again later');
-
-                }
-                const data = await response.json();
-                console.log(data);
-                applyData(data);
-            }catch (e) {
-                console.log(e);
-                applyData({error: 'register account failed, please try again later'})
-            }
-
-        } catch (err) {
-            setError(err.message || 'Something went wrong!');
-        }
-        setIsLoading(false);
-
-    }, []);
+    const registerHandler = (requestConfig = {}, applyData = (data: any) => {}) => {
+        // register(requestConfig, applyData);
+    };
 
     const contextValue: contextProp = {
         idToken: idToken,
         isLoggedIn: useIsLoggedIn,
         login: loginHandler,
         logout: logoutHandler,
-        register: registerHandler
+        register: registerHandler,
     }
 
     return (
