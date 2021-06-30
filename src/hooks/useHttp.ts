@@ -1,45 +1,14 @@
 import React, {useCallback, useState} from 'react';
 
-
 const useHttp = () => {
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const postToken = useCallback(async (requestConfig = {}, applyData = ()=> {}) => {
-        const loadedTasks = [];
+    const httpRequest = useCallback(async (requestConfig = {}, applyData = ()=> {}, errorMessage: {error: string}) => {
         try {
             setIsLoading(true);
-            setError(null);
-            let response = null;
-            response = await fetch(
-                requestConfig.url, {
-                    method: requestConfig.method ? requestConfig.method : 'GET' ,
-                    body: requestConfig.body? JSON.stringify(requestConfig.body): null,
-                    headers: requestConfig.headers? requestConfig.headers : {}
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error('Request failed!');
-            }
-
-            const data = await response.json();
-            console.log(data)
-            applyData(data);
-
-
-        } catch (err) {
-            setError(err.message || 'Something went wrong!');
-        }
-        setIsLoading(false);
-
-    }, []);
-
-    const register = useCallback(async (requestConfig = {}, applyData = ()=> {}) => {
-        try {
-            setIsLoading(true);
-            console.log('set is loading to true');
-            await console.log(isLoading);
+            console.log('sending request...');
             setError(null);
             let response = null;
             try {
@@ -51,7 +20,8 @@ const useHttp = () => {
                     }
                 );
                 if (!response.ok) {
-                    throw new Error('register account failed, please try again later');
+                    throw new Error(errorMessage.error);
+                    // throw new Error('register account failed, please try again later');
 
                 }
                 const data = await response.json();
@@ -59,7 +29,7 @@ const useHttp = () => {
                 applyData(data);
             }catch (e) {
                 console.log(e);
-                applyData({error: 'register account failed, please try again later'})
+                applyData({error: errorMessage.error})
             }
 
         } catch (err) {
@@ -71,41 +41,10 @@ const useHttp = () => {
 
     }, [isLoading, setIsLoading, error, setError]);
 
-    const sendRequest = useCallback(async (requestConfig = {}, applyData = ()=> {}) => {
-        const loadedTasks = [];
-        try {
-            setIsLoading(true);
-            setError(null);
-            let response = null;
-            response = await fetch(
-                requestConfig.url, {
-                    method: requestConfig.method ? requestConfig.method : 'GET' ,
-                    body: requestConfig.body? JSON.stringify(requestConfig.body): null,
-                    headers: requestConfig.headers? requestConfig.headers : {}
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error('Request failed!');
-            }
-
-            const data = await response.json();
-            console.log(data)
-            applyData(data);
-
-
-        } catch (err) {
-            setError(err.message || 'Something went wrong!');
-        }
-        setIsLoading(false);
-
-    }, []);
-
     return {
         isLoading,
         error: error,
-        sendRequest: sendRequest,
-        register,
+        httpRequest,
     } as const
 };
 

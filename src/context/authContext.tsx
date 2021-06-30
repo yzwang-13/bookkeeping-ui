@@ -1,13 +1,18 @@
 import React, {useCallback, useState} from 'react';
 import useHttp from "../hooks/useHttp";
+import {prodUrl, devUrl} from "../env/url";
+
+const baseUrl = devUrl;
 
 type contextProp = {
     idToken: string | null,
     isLoggedIn: boolean,
     login: (token: string) => void,
-    register: ({}: any, applyData: (data: any) => {}) => void,
-    logout: () => void
+    register: (email:string, handleResponse: (data: string) => void) => void,
+    logout: () => void,
+    isLoading: boolean,
 }
+
 
 export const AuthContext = React.createContext<contextProp | null>({
     idToken: '',
@@ -16,13 +21,15 @@ export const AuthContext = React.createContext<contextProp | null>({
     },
     logout: () => {
     },
-    register: ({}: any, applyData: (data: any) => {}) => {
-    }
+    register: (email:string, handleResponse: (data:string) => void) => {
+    },
+    isLoading: false,
 });
 
 export const AuthContextProvider: React.FC = (props) => {
+    const [isLoading, setIsLoading] = useState(false);
 
-    const {register} = useHttp();
+    const {httpRequest} = useHttp();
 
     const token = localStorage.getItem('id_token');
     const useIsLoggedIn = !!token;
@@ -35,21 +42,37 @@ export const AuthContextProvider: React.FC = (props) => {
 
     }
 
+    const register = async (email: string, handleResponse: (data: string) => void) => {
+        setIsLoading(true);
+        console.log('account registering...');
+        const requestConfig = {
+            url: baseUrl + '/auth/cognito/signup',
+            method: 'POST',
+            body: {email: email},
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        const errorMessage = {
+            error: 'Register account failed, please try again later'
+        }
+        await httpRequest(requestConfig, handleResponse, errorMessage);
+        setIsLoading(false);
+    }
+
     const logoutHandler = () => {
         setIdToken(null);
         localStorage.removeItem('id_token');
     }
 
-    const registerHandler = (requestConfig = {}, applyData = (data: any) => {}) => {
-        // register(requestConfig, applyData);
-    };
 
     const contextValue: contextProp = {
         idToken: idToken,
         isLoggedIn: useIsLoggedIn,
         login: loginHandler,
         logout: logoutHandler,
-        register: registerHandler,
+        register,
+        isLoading
     }
 
     return (

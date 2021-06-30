@@ -3,12 +3,13 @@ import ChangePasswordForm from "./ChangePasswordForm";
 import {CognitoUserSession} from "amazon-cognito-identity-js";
 import {useLocation} from "react-router-dom";
 import useCognito from "../../../hooks/auth/useCognito";
+import useHttp from "../../../hooks/useHttp";
 
 const ChangePasswordController:React.FC = (props) => {
 
     const location = useLocation();
     const {isLoading,signIn} = useCognito();
-;    const queryParams = new URLSearchParams(location.search);
+    const queryParams = new URLSearchParams(location.search);
     const userName = queryParams.get('id')
     console.log(userName);
 
